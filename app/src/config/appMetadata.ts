@@ -19,7 +19,7 @@ export const appMetadata: AppMetadata = {
   teamNameKana: 'はっかそんはつちょうせんで',
   workTitle: 'ZEN Inbox',
   workTitleKana: 'ぜん いんぼっくす',
-  workUrl: 'https://hackthonweb.btsi10-558.workers.dev',
+  workUrl: 'https://hackthon-web.pages.dev',
   toolsUsed: ['React', 'Vite', 'TypeScript', 'Chrome Built-in AI', 'Gemini API', 'Codex multi-agent review'],
 }
 
