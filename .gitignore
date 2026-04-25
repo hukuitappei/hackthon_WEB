@@ -3,5 +3,6 @@ app/dist/
 app/dist-ssr/
 app/*.local
 app/.env
+.claude/
 *.log
 .DS_Store
