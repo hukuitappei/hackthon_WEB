@@ -1,63 +1,64 @@
-# Agent Collaboration Plan
+# 協調実装計画
 
-## Goal
-- Build `ZEN Inbox` as a Chrome-first web app with a dashboard-first inbox triage experience.
-- Keep the app functional without AI and resilient when external integrations fail.
+## 目的
+- `ZEN Inbox` を Chrome 前提の Web アプリとして実装する
+- 一覧中心の Inbox 整理体験を最優先にする
+- AI が使えない場合でも成立し、外部連携失敗でも壊れない構成にする
 
-## Shared Constraints
-- Google Chrome is the primary runtime target.
-- The main UI is a dashboard, not a chat-first product.
-- AI is assistive and must fall back to rule-based processing.
-- Gmail write-back is limited to labeling.
-- Slack and LINE are future sources only for v1.
+## 共通制約
+- 主な実行環境は Google Chrome とする
+- 主役はチャットではなくダッシュボードとする
+- AI は補助であり、必ずルールベースのフォールバックを持つ
+- Gmail への書き戻しはラベル付与のみに限定する
+- Slack / LINE は v1 では実連携せず、将来拡張の考慮に留める
 
-## Ownership Split
-### Codex
-- Own architecture and integration boundaries.
-- Own data model and normalization flow.
-- Own fallback-safe inbox pipeline design.
-- Own implementation of shared types, selectors, and orchestration.
-- Own repository hygiene, commit flow, and release readiness.
+## 担当分担
+### Codex 担当
+- 全体設計と統合境界の管理
+- データモデルと正規化フローの設計
+- フォールバック前提の Inbox パイプライン設計
+- 共通型、セレクタ、整理オーケストレーションの実装
+- リポジトリ整備、コミット、push、最終統合作業
 
-### Claude Code
-- Own dashboard presentation details and interaction polish.
-- Own inbox card UX, filters, empty states, and source status surfaces.
-- Own copy refinement for calm, low-noise `ZEN` presentation.
-- Own demo flow tuning so the product story is clear in judging.
+### Claude Code 担当
+- ダッシュボードの見た目と操作体験の具体化
+- Inbox カード、フィルタ、空状態、接続状態表示の UI 実装
+- `ZEN` らしい静かなコピーと表示文言の調整
+- デモ時に伝わりやすい画面導線と体験の磨き込み
 
-## File Ownership
-### Codex-owned
+## ファイル責務
+### Codex 管轄
 - `app/src/features/inbox/**`
 - `app/src/features/gmail/**`
 - `app/src/features/ai/**`
 - `app/src/hooks/**`
-- `app/src/lib/**` except visual-only utilities
+- `app/src/lib/**`
 - `plan3_requirements.md`
 
-### Claude Code-owned
+### Claude Code 管轄
 - `app/src/components/**`
 - `app/src/styles/**`
 - `app/src/App.tsx`
 - `app/src/App.css`
 - `app/src/index.css`
 
-## Coordination Rules
-- Avoid overlapping edits unless explicitly synchronized.
-- Do not revert another agent's changes without confirmation.
-- Integrate through stable interfaces in `types.ts` first.
-- If Gmail integration blocks progress, continue with mock data and keep the UI demoable.
-- If on-device AI is unavailable, keep the rule-based pipeline and demo states intact.
+## 協調ルール
+- 事前合意なしに同じファイルを同時編集しない
+- 他方の変更を勝手に巻き戻さない
+- まず `types.ts` などの安定インターフェースを先に確定する
+- Gmail 連携が詰まっても、モックデータで UI 実装は止めない
+- オンデバイス AI が使えなくても、ルールベース分類で価値を維持する
 
-## Implementation Order
-1. Codex defines the core domain types and inbox pipeline contracts.
-2. Claude Code builds the dashboard UI against mock data and stable interfaces.
-3. Codex wires rule-based classification, AI orchestration, and source adapters.
-4. Claude Code refines the presentation, explanation surfaces, and judge-facing flow.
-5. Codex finalizes integration, verifies fallback paths, and prepares commit/push.
+## 実装順
+1. Codex がコア型と Inbox パイプラインの契約を定義する
+2. Claude Code がモックデータ前提でダッシュボード UI を構築する
+3. Codex がルール分類、AI オーケストレーション、source adapter を接続する
+4. Claude Code が表示品質、説明面、審査向け導線を整える
+5. Codex が全体統合、フォールバック確認、コミットと push を行う
 
-## Definition of Done for v1
-- Inbox items render in `urgent / soon / someday` views.
-- Each item shows source, summary, timestamp, kind, priority, and next action.
-- The app works with mock data even if Gmail is unavailable.
-- AI enhancement is visible but non-blocking.
-- Failure states are understandable and do not break the UI.
+## v1 完了条件
+- `urgent / soon / someday` の一覧で Inbox を確認できる
+- 各アイテムに source、要約、日時、分類、優先度、次アクションが表示される
+- Gmail が使えなくてもモックデータで体験を再現できる
+- AI 強化が見えるが、AI なしでも UI と整理体験が成立する
+- エラー時や空状態でも意味の分かる表示を維持できる
