@@ -207,7 +207,7 @@ function App() {
           <div className="panel-header">
             <div>
               <p className="panel-kicker">受信トレイフィード</p>
-              <h2>決定論的フォールバックを備えた Gmail ファーストのトリアージ。</h2>
+              <h2>今日やるべきことを整理しよう。</h2>
             </div>
             <span className="pill">サンプル Gmail データ</span>
           </div>
