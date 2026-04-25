@@ -1,0 +1,327 @@
+.app-shell {
+  display: grid;
+  gap: 2rem;
+  padding: 2rem 0 3rem;
+}
+
+.hero,
+.panel {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  background: rgba(250, 246, 239, 0.84);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+}
+
+.hero {
+  display: grid;
+  gap: 1.5rem;
+  padding: 2rem;
+  background:
+    radial-gradient(circle at top right, rgba(181, 222, 195, 0.7), transparent 32%),
+    radial-gradient(circle at left center, rgba(248, 191, 114, 0.18), transparent 28%),
+    rgba(250, 246, 239, 0.92);
+}
+
+.hero-copy {
+  max-width: 52rem;
+}
+
+.eyebrow,
+.panel-kicker,
+.slot-tag,
+.stat-label {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero h1,
+.panel h2,
+.goal-card h3,
+.slot-card h3,
+.provider-card h3,
+.metadata-card h3,
+.checklist-card h3,
+.result-card h3 {
+  margin: 0;
+  color: var(--text-strong);
+}
+
+.hero h1 {
+  max-width: 12ch;
+  font-size: clamp(2.8rem, 7vw, 4.7rem);
+  line-height: 0.95;
+}
+
+.hero-summary {
+  max-width: 48rem;
+  margin-top: 1rem;
+  font-size: 1.04rem;
+}
+
+.hero-status {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.stat-card,
+.goal-card,
+.slot-card,
+.provider-card,
+.metadata-card,
+.checklist-card,
+.result-card {
+  border: 1px solid rgba(78, 72, 64, 0.12);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.68);
+}
+
+.stat-card {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1.1rem;
+}
+
+.dashboard {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.panel {
+  display: grid;
+  gap: 1.4rem;
+  padding: 1.5rem;
+}
+
+.panel-header {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.panel-header h2 {
+  margin-top: 0.4rem;
+  font-size: clamp(1.5rem, 3vw, 2.2rem);
+  line-height: 1.02;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(28, 49, 36, 0.08);
+  color: var(--text-strong);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  white-space: nowrap;
+}
+
+.pill-accent {
+  background: rgba(211, 98, 27, 0.1);
+}
+
+.goal-grid,
+.provider-grid,
+.metadata-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.goal-card,
+.slot-card,
+.metadata-card,
+.checklist-card,
+.result-card {
+  padding: 1.1rem;
+}
+
+.slot-list,
+.playground {
+  display: grid;
+  gap: 1rem;
+}
+
+.slot-card {
+  display: grid;
+  gap: 1rem;
+  align-items: start;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+}
+
+.slot-copy,
+.provider-card,
+.prompt-field,
+.checklist,
+.tool-list {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.slot-example {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: rgba(28, 49, 36, 0.05);
+  color: var(--text-strong);
+}
+
+.provider-card {
+  position: relative;
+  cursor: pointer;
+  padding: 1rem;
+  transition:
+    transform 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.provider-card:hover,
+.provider-card.selected {
+  transform: translateY(-2px);
+  border-color: rgba(211, 98, 27, 0.32);
+  box-shadow: 0 20px 40px rgba(42, 37, 32, 0.08);
+}
+
+.provider-radio {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.provider-topline,
+.result-header,
+.playground-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.provider-state {
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.73rem;
+}
+
+.state-ready {
+  background: rgba(58, 138, 92, 0.14);
+  color: #225a3a;
+}
+
+.state-downloadable {
+  background: rgba(209, 132, 8, 0.14);
+  color: #925b02;
+}
+
+.state-unavailable,
+.state-not-configured,
+.state-planned {
+  background: rgba(88, 84, 78, 0.12);
+  color: #5d584f;
+}
+
+.prompt-field span {
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+.prompt-field textarea {
+  min-height: 11rem;
+  resize: vertical;
+  border: 1px solid rgba(78, 72, 64, 0.16);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.88);
+  padding: 1rem 1.1rem;
+  color: var(--text-strong);
+  font: inherit;
+}
+
+.prompt-field textarea:focus-visible,
+.run-button:focus-visible {
+  outline: 2px solid rgba(211, 98, 27, 0.6);
+  outline-offset: 2px;
+}
+
+.run-button {
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #c45d1b, #9f3d16);
+  color: #fff9f2;
+  padding: 0.85rem 1.2rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.run-button:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+.execution-note,
+.result-placeholder,
+.error-text {
+  margin: 0;
+}
+
+.result-text {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.error-text {
+  color: #9c341f;
+}
+
+.metadata-card dl {
+  margin: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.metadata-card dt {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.metadata-card dd {
+  margin: 0.2rem 0 0;
+  color: var(--text-strong);
+  font-weight: 700;
+}
+
+.tool-list,
+.checklist {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+@media (max-width: 960px) {
+  .hero-status,
+  .goal-grid,
+  .provider-grid,
+  .metadata-grid,
+  .slot-card {
+    grid-template-columns: 1fr;
+  }
+
+  .panel-header,
+  .playground-actions,
+  .provider-topline,
+  .result-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
