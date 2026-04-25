@@ -11,3 +11,10 @@ app/.env
 .vscode/
 *.pdf
 claude_code_handoff.md
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example
+.env*
+!.env.example
