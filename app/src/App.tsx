@@ -181,8 +181,8 @@ function App() {
     <div className="app-shell">
       <header className="hero">
         <div className="hero-copy">
-          <p className="eyebrow">ZEN Inbox</p>
-          <h1>Gmail 受信トレイを AI で整理して、今日の一手を決める</h1>
+          <h1>ZEN Inbox</h1>
+          <p className="eyebrow">Gmail 受信トレイを AI で整理して、今日の一手を決める</p>
           <p className="hero-summary">
             Hackathon v1 用の Gmail ファーストな受信トレイ仕分けツール。メッセージを <strong>急ぎ</strong>,{' '}
             <strong>近日中</strong>, <strong>いつか</strong> に分類して理由を提示し、AI を必須ではなく支援レイヤーとして活用します。
