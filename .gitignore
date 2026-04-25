@@ -7,3 +7,7 @@ app/.env
 *.log
 .DS_Store
 *.env
+.specstory/
+.vscode/
+*.pdf
+claude_code_handoff.md
