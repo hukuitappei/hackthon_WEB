@@ -399,7 +399,7 @@ function App() {
           <div className="panel-header">
             <div>
               <p className="panel-kicker">AI アシスト</p>
-              <h2>コアフローを阻害せずに、Chrome Built-in AIとクラウドへのフォールバックを検証する。</h2>
+              <h2>AI サポート</h2>
             </div>
             <span className="pill pill-accent">{isCheckingProviders ? 'プロバイダーを確認中' : 'プロバイダー準備完了'}</span>
           </div>
