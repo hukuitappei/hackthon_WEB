@@ -11,6 +11,7 @@ export type ProviderAvailability = {
 export type AIRequest = {
   prompt: string
   systemPrompt?: string
+  allowCloudProcessing?: boolean
 }
 
 export type AIResponse = {
@@ -36,13 +37,13 @@ export const aiProviders: AIProvider[] = [
   {
     id: 'browserBuiltIn',
     name: 'Chrome Built-in AI',
-    description: 'Runs on-device in supported Chrome environments through the Prompt API.',
+    description: '対応した Chrome 環境で Prompt API を通じて端末上で実行します。',
     async checkAvailability() {
       if (!('LanguageModel' in globalThis)) {
         return {
           state: 'unavailable',
-          summary: 'Prompt API was not detected in this browser.',
-          detail: 'Use a supported Chrome desktop environment with built-in AI enabled.',
+          summary: 'このブラウザでは Prompt API を検出できませんでした。',
+          detail: 'Built-in AI を有効にした対応版 Chrome デスクトップ環境を利用してください。',
         }
       }
 
@@ -53,32 +54,32 @@ export const aiProviders: AIProvider[] = [
           case 'available':
             return {
               state: 'ready',
-              summary: 'Prompt API is ready to use in this browser.',
+              summary: 'このブラウザで Prompt API を利用できます。',
             }
           case 'downloadable':
           case 'downloading':
             return {
               state: 'downloadable',
-              summary: 'The model is available but Chrome may need to download it first.',
+              summary: '利用可能ですが、Chrome 側でモデルのダウンロードが必要な場合があります。',
             }
           default:
             return {
               state: 'unavailable',
-              summary: 'Prompt API exists but the model is not available on this device.',
-              detail: `Availability result: ${availability}`,
+              summary: 'Prompt API は存在しますが、この端末ではモデルを利用できません。',
+              detail: `可用性結果: ${availability}`,
             }
         }
       } catch (error) {
         return {
           state: 'unavailable',
-          summary: 'Prompt API detection failed.',
+          summary: 'Prompt API の確認に失敗しました。',
           detail: getErrorMessage(error),
         }
       }
     },
     async generate(request) {
       if (!('LanguageModel' in globalThis)) {
-        throw new Error('Prompt API is not available in this browser.')
+        throw new Error('このブラウザでは Prompt API を利用できません。')
       }
 
       const session = await globalThis.LanguageModel.create({
@@ -102,41 +103,48 @@ export const aiProviders: AIProvider[] = [
   {
     id: 'transformersJs',
     name: 'Transformers.js',
-    description: 'Reserved for browser-local models when you decide which task-specific model to bundle.',
+    description: 'タスクに応じたブラウザ内ローカルモデルを後から組み込むための予約枠です。',
     async checkAvailability() {
       return {
         state: 'planned',
-        summary: 'Provider slot is ready, but no model pipeline is bundled yet.',
-        detail: 'Add a task-specific Transformers.js pipeline after the final theme is known.',
+        summary: '枠はありますが、まだモデルパイプラインは組み込まれていません。',
+        detail: 'テーマ確定後に、用途に合った Transformers.js パイプラインを追加してください。',
       }
     },
     async generate() {
-      throw new Error('Transformers.js is not wired yet. Choose a model after the theme is announced.')
+      throw new Error('Transformers.js はまだ接続されていません。テーマ確定後にモデルを選定してください。')
     },
   },
   {
     id: 'geminiApi',
     name: 'Gemini API',
-    description: 'Cloud fallback for browsers where local AI is unavailable or not ready.',
+    description: 'ローカルAIが使えない、または準備できていないブラウザ向けのクラウドフォールバックです。',
     async checkAvailability() {
       if (!import.meta.env.VITE_GEMINI_API_KEY) {
         return {
           state: 'not-configured',
-          summary: 'Add VITE_GEMINI_API_KEY to enable the cloud fallback provider.',
+          summary: 'クラウドフォールバックを有効にするには VITE_GEMINI_API_KEY を設定してください。',
         }
       }
 
       return {
         state: 'ready',
-        summary: `Configured to call ${defaultGeminiModel}.`,
+        summary: `${defaultGeminiModel} を呼び出す設定です。`,
       }
     },
     async generate(request) {
       const apiKey = import.meta.env.VITE_GEMINI_API_KEY
 
       if (!apiKey) {
-        throw new Error('VITE_GEMINI_API_KEY is not set.')
+        throw new Error('VITE_GEMINI_API_KEY が設定されていません。')
       }
+
+      if (!request.allowCloudProcessing) {
+        throw new Error('Gemini API を使うには、クラウド送信への同意を有効にしてください。')
+      }
+
+      const sanitizedPrompt = sanitizeForCloud(request.prompt)
+      const sanitizedSystemPrompt = request.systemPrompt ? sanitizeForCloud(request.systemPrompt) : undefined
 
       const response = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/${defaultGeminiModel}:generateContent`,
@@ -147,15 +155,15 @@ export const aiProviders: AIProvider[] = [
             'x-goog-api-key': apiKey,
           },
           body: JSON.stringify({
-            systemInstruction: request.systemPrompt
+            systemInstruction: sanitizedSystemPrompt
               ? {
-                  parts: [{ text: request.systemPrompt }],
+                  parts: [{ text: sanitizedSystemPrompt }],
                 }
               : undefined,
             contents: [
               {
                 role: 'user',
-                parts: [{ text: request.prompt }],
+                parts: [{ text: sanitizedPrompt }],
               },
             ],
           }),
@@ -164,14 +172,14 @@ export const aiProviders: AIProvider[] = [
 
       if (!response.ok) {
         const detail = await response.text()
-        throw new Error(`Gemini API request failed with ${response.status}: ${detail}`)
+        throw new Error(`Gemini API リクエストが ${response.status} で失敗しました: ${detail}`)
       }
 
       const data = (await response.json()) as GeminiGenerateContentResponse
       const text = data.candidates?.[0]?.content?.parts?.map((part) => part.text).filter(Boolean).join('\n')
 
       if (!text) {
-        throw new Error('Gemini API returned no text candidate.')
+        throw new Error('Gemini API からテキスト候補が返りませんでした。')
       }
 
       return {
@@ -186,7 +194,7 @@ export const aiProviders: AIProvider[] = [
 
 export function getPreferredProviderId(availabilityMap: AvailabilityMap): ProviderId | null {
   const preferredOrder: ProviderId[] = ['browserBuiltIn', 'geminiApi', 'transformersJs']
-  const runnableStates: ProviderAvailabilityState[] = ['ready', 'downloadable']
+  const runnableStates: ProviderAvailabilityState[] = ['ready']
 
   const preferredReady = preferredOrder.find((providerId) => {
     const availability = availabilityMap[providerId]
@@ -197,12 +205,15 @@ export function getPreferredProviderId(availabilityMap: AvailabilityMap): Provid
     return preferredReady
   }
 
-  const firstKnown = preferredOrder.find((providerId) => availabilityMap[providerId])
+  const firstKnown = preferredOrder.find((providerId) => {
+    const availability = availabilityMap[providerId]
+    return availability && availability.state !== 'planned'
+  })
   return firstKnown ?? null
 }
 
 export function getExecutionPlan(selectedProviderId: ProviderId, availabilityMap: AvailabilityMap): AIProvider[] {
-  const runnableStates: ProviderAvailabilityState[] = ['ready', 'downloadable']
+  const runnableStates: ProviderAvailabilityState[] = ['ready']
   const orderedIds: ProviderId[] = [
     selectedProviderId,
     ...aiProviders.map((provider) => provider.id).filter((providerId) => providerId !== selectedProviderId),
@@ -219,7 +230,14 @@ export function getExecutionPlan(selectedProviderId: ProviderId, availabilityMap
 }
 
 function getErrorMessage(error: unknown) {
-  return error instanceof Error ? error.message : 'Unknown error.'
+  return error instanceof Error ? error.message : '不明なエラーです。'
+}
+
+function sanitizeForCloud(text: string) {
+  return text
+    .replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, '[redacted-email]')
+    .replace(/\b\d{2,4}[-\s]?\d{2,4}[-\s]?\d{3,4}\b/g, '[redacted-phone]')
+    .replace(/https?:\/\/\S+/gi, '[redacted-url]')
 }
 
 type GeminiGenerateContentResponse = {

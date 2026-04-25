@@ -1,20 +1,20 @@
 :root {
-  --bg: #efe6d8;
-  --bg-deep: #d9c4aa;
-  --surface: #faf6ef;
-  --border: rgba(78, 72, 64, 0.14);
-  --text: #5b534b;
-  --text-strong: #221d18;
-  --text-muted: #7f7468;
-  --shadow: 0 24px 60px rgba(42, 37, 32, 0.12);
-  --sans: 'Segoe UI', 'Hiragino Sans', 'Yu Gothic UI', sans-serif;
-  --heading: Georgia, 'Times New Roman', serif;
+  --bg: #e9dfd2;
+  --bg-deep: #d5c0a8;
+  --surface: #fbf7f1;
+  --border: rgba(67, 58, 46, 0.14);
+  --text: #5c5348;
+  --text-strong: #211b16;
+  --text-muted: #776c61;
+  --shadow: 0 24px 60px rgba(39, 34, 28, 0.12);
+  --sans: 'Aptos', 'Yu Gothic UI', 'Hiragino Sans', sans-serif;
+  --heading: 'Palatino Linotype', 'Book Antiqua', serif;
   --mono: 'Cascadia Code', Consolas, monospace;
 
   color: var(--text);
   background:
-    radial-gradient(circle at top left, rgba(181, 222, 195, 0.55), transparent 26%),
-    radial-gradient(circle at bottom right, rgba(221, 151, 80, 0.35), transparent 28%),
+    radial-gradient(circle at top left, rgba(122, 167, 134, 0.42), transparent 24%),
+    radial-gradient(circle at bottom right, rgba(196, 107, 50, 0.3), transparent 28%),
     linear-gradient(180deg, var(--bg), var(--bg-deep));
   font: 16px/1.6 var(--sans);
   font-synthesis: none;
@@ -41,9 +41,9 @@ body::before {
   position: fixed;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.22) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.16) 1px, transparent 1px);
-  background-size: 36px 36px;
+    linear-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.12) 1px, transparent 1px);
+  background-size: 42px 42px;
   mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.7), transparent);
   pointer-events: none;
 }
