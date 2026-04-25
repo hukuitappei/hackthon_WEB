@@ -478,66 +478,6 @@ function App() {
           </div>
         </section>
 
-        <section className="panel panel-project">
-          <div className="panel-header">
-            <div>
-              <p className="panel-kicker">プロジェクト情報</p>
-              <h2>提出コンテキストとロールアウト保護策</h2>
-            </div>
-            <span className="pill">Hackathon v1</span>
-          </div>
-
-          <div className="goal-grid">
-            {foundationGoals.map((goal) => (
-              <article key={goal.title} className="goal-card">
-                <h3>{goal.title}</h3>
-                <p>{goal.description}</p>
-              </article>
-            ))}
-          </div>
-
-          <div className="metadata-grid">
-            <article className="metadata-card">
-              <h3>アプリ情報 (App metadata)</h3>
-              <dl>
-                <div>
-                  <dt>チーム名</dt>
-                  <dd>{appMetadata.teamName}</dd>
-                </div>
-                <div>
-                  <dt>チーム名カナ</dt>
-                  <dd>{appMetadata.teamNameKana}</dd>
-                </div>
-                <div>
-                  <dt>作品名</dt>
-                  <dd>{appMetadata.workTitle}</dd>
-                </div>
-                <div>
-                  <dt>作品URL</dt>
-                  <dd>{appMetadata.workUrl}</dd>
-                </div>
-              </dl>
-            </article>
-
-            <article className="metadata-card">
-              <h3>使用ツール (Tools used)</h3>
-              <ul className="tool-list">
-                {appMetadata.toolsUsed.map((tool) => (
-                  <li key={tool}>{tool}</li>
-                ))}
-              </ul>
-            </article>
-          </div>
-
-          <article className="checklist-card">
-            <h3>提出前チェックリスト (Submission checklist)</h3>
-            <ul className="checklist">
-              {submissionChecklist.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-        </section>
       </main>
     </div>
   )
